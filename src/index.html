@@ -6,26 +6,38 @@
     <title>Weather App</title>
   </head>
   <body>
-    <div id="app">
+    <div class="container">
       <header>
         <h1>Weather App</h1>
       </header>
-
       <main>
-        <div id="search-container">
-          <form id="weather-form">
+        <section class="search-container">
+          <form class="weather-form">
             <input
               type="text"
+              class="location-input"
               id="location-input"
-              placeholder="Ingresa una ubicación..."
+              placeholder="Enter a location..."
             />
-            <button type="submit">Buscar</button>
+            <button class="submit-btn" type="submit">Search</button>
           </form>
-          <button id="temp-toggle">°F / °C</button>
-        </div>
+        </section>
 
-        <div id="loading" class="hidden">Cargando...</div>
-        <div id="weather-display" class="hidden"></div>
+        <div class="switch-toggle">
+          <input
+            class="switch-toggle-checkbox"
+            type="checkbox"
+            id="temp-toggle"
+          />
+          <label class="switch-toggle-label" for="temp-toggle">
+            <span>°F</span>
+            <span>°C</span>
+          </label>
+        </div>
+        <section class="result-container hidden">
+          <div id="loading" class="hidden">Loading...</div>
+          <div id="weather-display"></div>
+        </section>
       </main>
     </div>
   </body>
