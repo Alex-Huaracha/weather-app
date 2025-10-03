@@ -11,7 +11,7 @@ function forecastItem(day) {
     <div class="forecast-item">
       <img src="https://raw.githubusercontent.com/visualcrossing/WeatherIcons/main/PNG/2nd%20Set%20-%20Color/${icon}.png" alt="icono clima">
       <div class="forecast-date">${date}</div>
-      <div class="forecast-temp">${day.tempmin}°C / ${day.tempmax}°C</div>
+      <div class="forecast-temp">${day.tempmin}° / ${day.tempmax}°</div>
       <div class="forecast-desc">${day.conditions}</div>
     </div>
   `;
@@ -29,7 +29,7 @@ function drawWeatherGrid(data) {
 
   document.querySelector('.weather-main').innerHTML = `
   <img class="weather-icon" src="https://raw.githubusercontent.com/visualcrossing/WeatherIcons/main/PNG/2nd%20Set%20-%20Color/${iconWeather}.png" alt="weather icon">
-  <span class="weather-temp">${temp}°C</span>
+  <span class="weather-temp">${temp}°</span>
 `;
 
   const location = data.resolvedAddress;
@@ -63,19 +63,33 @@ function drawWeatherGrid(data) {
 document.addEventListener('DOMContentLoaded', () => {
   const weatherForm = document.querySelector('.weather-form');
   const locationInput = document.querySelector('#location-input');
+  const tempToggle = document.getElementById('temp-toggle');
+  let currentLocation = '';
+  let currentUnit = 'metric';
+
+  function fetchAndRenderWeather(location, unit) {
+    document.querySelector('.result-container').classList.remove('hidden');
+    document.getElementById('loading').classList.remove('hidden');
+    getWeather(location, unit).then((data) => {
+      document.getElementById('loading').classList.add('hidden');
+      drawWeatherGrid(data);
+    });
+  }
 
   weatherForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const location = locationInput.value.trim();
     if (location) {
-      document.querySelector('.result-container').classList.remove('hidden');
-      document.getElementById('loading').classList.remove('hidden');
-      getWeather(location).then((data) => {
-        document.getElementById('loading').classList.add('hidden');
-        drawWeatherGrid(data);
-      });
-      // console log for data weather debugging
-      getWeather(location).then((data) => console.log(data));
+      currentLocation = location;
+      fetchAndRenderWeather(location, currentUnit);
+      getWeather(location, currentUnit).then((data) => console.log(data));
+    }
+  });
+
+  tempToggle.addEventListener('change', () => {
+    currentUnit = tempToggle.checked ? 'imperial' : 'metric';
+    if (currentLocation) {
+      fetchAndRenderWeather(currentLocation, currentUnit);
     }
   });
 });
